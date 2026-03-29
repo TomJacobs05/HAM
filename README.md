@@ -1,6 +1,6 @@
-# HAM: Hyperbolic Aware Minimization
+# Hyperbolic Aware Minimization: Implicit Bias for Sparsity
  
-> **Implicit Bias for Sparsity** — an optimizer wrapper that adds a hyperbolic mirror step to any first-order optimizer, inducing mild sparsity and accelerating sign learning with negligible overhead.
+An optimizer wrapper that adds a hyperbolic mirror step to any first-order optimizer, inducing mild sparsity and accelerating sign learning with negligible overhead.
  
 📄 **[Read the paper on Arxiv (ICLR 2026)](https://arxiv.org/abs/2506.02630)**
 &nbsp;&nbsp;&nbsp;&nbsp;*Tom Jacobs, Advait Gadhikar, Celia Rubio-Madrigal, Rebekka Burkholz*
