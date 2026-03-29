@@ -21,6 +21,38 @@ HAM wraps any existing PyTorch optimizer (`Adam`, `SGD`, `AdamW`, …).
  
 ---
 
+## Algorithm
+ 
+```latex
+\begin{algorithm}[H]
+\caption{Hyperbolic Aware Minimization (\textbf{HAM})}
+\begin{algorithmic}[1]
+\Require Learning rate $\eta > 0$, objective $f$, total steps $T$,
+         hyperparameters $\alpha, \beta \ge 0$ and initialize $\bm{\theta}_0$
+\For{$k = 0, 1, \dots, T-1$}
+    \State \textbf{Step 1 (Standard optimizer step):}
+    \State \[\bm{\theta}_{k+\frac{1}{2}} \leftarrow \bm{\theta}_k - \eta \nabla f(\bm{\theta}_k)\]
+    \State \textbf{Step 2 (Hyperbolic gradient step):}
+    \State \[
+    \bm{\theta}_{k+1}
+    \gets
+    \bm{\theta}_{k+\frac{1}{2}}
+    \odot
+    \exp\!\left(
+        -\eta \left(
+            \alpha\, \mathrm{sign}(\bm{\theta}_{k+\frac{1}{2}}) \odot \nabla f(\bm{\theta}_k)
+            + \beta
+        \right)
+    \right)
+    \]
+\EndFor
+\State \Return $\bm{\theta}_T$
+\end{algorithmic}
+\end{algorithm}
+```
+ 
+---
+
 ## Optimizer Wrapper
 ```python
 class HamOptimizerWrapper(torch.optim.Optimizer):
