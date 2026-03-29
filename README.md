@@ -30,7 +30,7 @@ class HamOptimizerWrapper(torch.optim.Optimizer):
     After each base optimizer step, HAM rescales weight tensors (ndim >= 2)
     by an exponential factor derived from the gradient sign and a decay term:
  
-        w  ←  w · exp(lr · (−α · sign(w) · ∇w  −  β))
+        w  ←  w · exp(lr · (−α · sign(w) · ∇f(w)  −  β))
  
     This induces a mild implicit sparsity bias without zeroing weights.
     Scalar / bias / norm parameters are left untouched by the HAM step but
