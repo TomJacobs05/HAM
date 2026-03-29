@@ -21,38 +21,6 @@ HAM wraps any existing PyTorch optimizer (`Adam`, `SGD`, `AdamW`, …).
  
 ---
 
-## Algorithm
- 
-```latex
-\begin{algorithm}[H]
-\caption{Hyperbolic Aware Minimization (\textbf{HAM})}
-\begin{algorithmic}[1]
-\Require Learning rate $\eta > 0$, objective $f$, total steps $T$,
-         hyperparameters $\alpha, \beta \ge 0$ and initialize $\bm{\theta}_0$
-\For{$k = 0, 1, \dots, T-1$}
-    \State \textbf{Step 1 (Standard optimizer step):}
-    \State \[\bm{\theta}_{k+\frac{1}{2}} \leftarrow \bm{\theta}_k - \eta \nabla f(\bm{\theta}_k)\]
-    \State \textbf{Step 2 (Hyperbolic gradient step):}
-    \State \[
-    \bm{\theta}_{k+1}
-    \gets
-    \bm{\theta}_{k+\frac{1}{2}}
-    \odot
-    \exp\!\left(
-        -\eta \left(
-            \alpha\, \mathrm{sign}(\bm{\theta}_{k+\frac{1}{2}}) \odot \nabla f(\bm{\theta}_k)
-            + \beta
-        \right)
-    \right)
-    \]
-\EndFor
-\State \Return $\bm{\theta}_T$
-\end{algorithmic}
-\end{algorithm}
-```
- 
----
-
 ## Optimizer Wrapper
 ```python
 class HamOptimizerWrapper(torch.optim.Optimizer):
@@ -159,6 +127,36 @@ class HamOptimizerWrapper(torch.optim.Optimizer):
         """Clear gradients in the wrapped optimizer."""
         self.optimizer.zero_grad()
 ```
+
+## Results
+ 
+Dense-to-sparse training and pruning at initialization with HAM on ImageNet with ResNet-50 (top-1 accuracy):
+ 
+| Pruning type | Method | s = 0.8 | s = 0.9 | s = 0.95 |
+|---|---|---|---|---|
+| **PaI** | Random | 73.87 (±0.06) | 71.56 (±0.03) | 68.72 (±0.05) |
+| | Random + Sign-In | 74.12 (±0.09) | 72.19 (±0.18) | 69.38 (±0.10) |
+| | Random + HAM | **74.84 (±0.09)** | **72.72 (±0.03)** | **70.05 (±0.06)** |
+| **DtS** | AC/DC | 75.83 (±0.02) | 74.75 (±0.02) | 72.59 (±0.11) |
+| | AC/DC + Sign-In | 75.90 (±0.14) | 74.74 (±0.12) | 72.88 (±0.13) |
+| | AC/DC + HAM | **77.20 (±0.14)** | **76.66 (±0.12)** | **75.45 (±0.13)** |
+| **DST** | RiGL | 75.02 (±0.10) | 73.70 (±0.20) | 71.89 (±0.07) |
+| | RiGL + Sign-In | 75.02 (±0.10) | 74.27 (±0.08) | **73.07 (±0.17)** |
+| | RiGL + HAM | **76.22 (±0.07)** | **74.83 (±0.08)** | 72.93 (±0.10) |
+| **Cont. spars.** | spred | 72.64 | 71.84 | 69.47 |
+| | PILoT | 75.62 | 74.73 | 71.30 |
+| | STR | 75.49 (±0.14) | 72.40 (±0.11) | 64.94 (±0.07) |
+| | STR + HAM | **76.37 (±0.18)** | **75.01 (±0.02)** | **71.41 (±0.10)** |
+ 
+HAM combines naturally with SAM and dense training as well.
+Dense training of ResNet-50 on ImageNet (top-1 accuracy):
+ 
+| | 100 epochs | 200 epochs | + SAM, 100 epochs | + SAM, 200 epochs |
+|---|---|---|---|---|
+| Baseline | 76.72 (±0.19) | 77.27 (±0.13) | 77.10 (±0.21) | 77.94 (±0.16) |
+| HAM | **77.51 (±0.11)** | **77.86 (±0.05)** | **77.92 (±0.15)** | **78.56 (±0.12)** |
+ 
+---
 
 
 ## Citation
