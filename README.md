@@ -1,4 +1,4 @@
-# HAM: Hyperbolic Aware Minimization
+# Hyperbolic Aware Minimization: Implicit Bias for Sparsity
 
 [![arXiv](https://img.shields.io/badge/arXiv-2506.02630-b31b1b.svg)](https://arxiv.org/abs/2506.02630)
 [![ICLR](https://img.shields.io/badge/ICLR-2026-green.svg)](https://openreview.net/forum?id=XKB5Hu0ACY)
