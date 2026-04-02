@@ -137,8 +137,12 @@ class HamOptimizerWrapper(torch.optim.Optimizer):
 ```
 
 ## Results
+
+### Sparse methods
  
 Dense-to-sparse training and pruning at initialization with HAM on ImageNet with ResNet-50 (top-1 accuracy):
+
+<img src="ham_sparse.svg" width="600" />
  
 | Pruning type | Method | s = 0.8 | s = 0.9 | s = 0.95 |
 |---|---|---|---|---|
@@ -156,8 +160,12 @@ Dense-to-sparse training and pruning at initialization with HAM on ImageNet with
 | | [STR](https://github.com/RAIVNLab/STR) | 75.49 (±0.14) | 72.40 (±0.11) | 64.94 (±0.07) |
 | | STR + HAM (ours) | **76.37 (±0.18)** | **75.01 (±0.02)** | **71.41 (±0.10)** |
  
+### Dense training
+
 HAM combines naturally with [SAM](https://arxiv.org/pdf/2010.01412) and dense training as well.
 Dense training of ResNet-50 on ImageNet (top-1 accuracy):
+
+<img src="ham_dense.svg" width="600" />
  
 | | 100 epochs | 200 epochs | + SAM, 100 epochs | + SAM, 200 epochs |
 |---|---|---|---|---|
