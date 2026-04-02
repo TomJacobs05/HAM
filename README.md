@@ -1,23 +1,31 @@
-# Hyperbolic Aware Minimization: Implicit Bias for Sparsity
+# Hyperbolic Aware Minimization: Implicit Bias for Sparsity (ICLR 2026)
+
+[![arXiv](https://img.shields.io/badge/arXiv-2506.02630-b31b1b.svg)](https://arxiv.org/abs/2506.02630)
+[![ICLR](https://img.shields.io/badge/ICLR-2026-green.svg)](https://openreview.net/forum?id=XKB5Hu0ACY)
  
+*Tom Jacobs, Advait Gadhikar, Celia Rubio-Madrigal, Rebekka Burkholz*
+
+
 An optimizer wrapper that adds a hyperbolic mirror step to any first-order optimizer, inducing mild sparsity and accelerating sign learning with negligible overhead.
+- 🔀 **Sign acceleration** — faster learning around zero promotes parameter sign flips, improving feature learning
+- 🌿 **Mild sparsity bias** — regularizes training; complementary to sharpness-aware methods (SAM)
  
-📄 **[Read the paper on Arxiv (ICLR 2026)](https://arxiv.org/abs/2506.02630)**
-&nbsp;&nbsp;&nbsp;&nbsp;*Tom Jacobs, Advait Gadhikar, Celia Rubio-Madrigal, Rebekka Burkholz*
+HAM wraps any existing PyTorch optimizer (`Adam`, `SGD`, `AdamW`, …).
  
 ---
  
 ## What is HAM?
  
-HAM (Hyperbolic Aware Minimization) addresses a key tension in sparse training namely that the optimizers bias is not aligned with the goal of sparsity: the overparameterization trick `m * w` induces a useful hyperbolic implicit bias towards sparsity, but shrinks the effective learning rate and slows convergence.
- 
-HAM resolves this by **alternating** between a standard optimizer step and a lightweight hyperbolic mirror step. This preserves the beneficial geometry of `m * w` while keeping the learning rate larger and giving you direct control over the strength and shape of the sparsity bias.
- 
-**Two core mechanisms:**
-- 🔀 **Sign acceleration** — faster learning around zero promotes parameter sign flips, improving feature learning
-- 🌿 **Mild sparsity bias** — regularizes training complementary to sharpness-aware methods (SAM)
- 
-HAM wraps any existing PyTorch optimizer (`Adam`, `SGD`, `AdamW`, …).
+HAM (Hyperbolic Aware Minimization) addresses a key tension in sparse training: namely, that the optimizers bias is not aligned with the goal of sparsity. 
+
+The overparameterization trick `m * w` induces a useful hyperbolic implicit bias towards sparsity [1,2,3], but shrinks the effective learning rate and slows convergence. HAM resolves this by **alternating** between a standard optimizer step and a lightweight hyperbolic mirror step. This preserves the beneficial geometry of `m * w` while keeping the learning rate larger and giving direct control over the strength and shape of the sparsity bias.
+
+[[1]](https://openreview.net/forum?id=U47ymTS3ut) Jacobs & Burkholz. Mask in the Mirror: Implicit Sparsification. ICLR 2025.
+
+[[2]](https://openreview.net/forum?id=MLiR9LS5PW) Jacobs, Zhou, Burkholz. Mirror, Mirror of the Flow: How Does Regularization Shape Implicit Bias?. ICML 2025. 
+
+[[3]](https://openreview.net/forum?id=iwKT7MEZZw) Gadhikar*, Jacobs*, Zhou, Burkholz. Sign-In to the Lottery: Reparameterizing Sparse Training. NeurIPS 2025. 
+
  
 ---
 
@@ -135,26 +143,26 @@ Dense-to-sparse training and pruning at initialization with HAM on ImageNet with
 | Pruning type | Method | s = 0.8 | s = 0.9 | s = 0.95 |
 |---|---|---|---|---|
 | **PaI** | Random | 73.87 (±0.06) | 71.56 (±0.03) | 68.72 (±0.05) |
-| | Random + Sign-In | 74.12 (±0.09) | 72.19 (±0.18) | 69.38 (±0.10) |
-| | Random + HAM | **74.84 (±0.09)** | **72.72 (±0.03)** | **70.05 (±0.06)** |
-| **DtS** | AC/DC | 75.83 (±0.02) | 74.75 (±0.02) | 72.59 (±0.11) |
+| | Random + [Sign-In](https://openreview.net/forum?id=iwKT7MEZZw) | 74.12 (±0.09) | 72.19 (±0.18) | 69.38 (±0.10) |
+| | Random + HAM (ours) | **74.84 (±0.09)** | **72.72 (±0.03)** | **70.05 (±0.06)** |
+| **DtS** | [AC/DC](https://github.com/IST-DASLab/ACDC) | 75.83 (±0.02) | 74.75 (±0.02) | 72.59 (±0.11) |
 | | AC/DC + Sign-In | 75.90 (±0.14) | 74.74 (±0.12) | 72.88 (±0.13) |
-| | AC/DC + HAM | **77.20 (±0.14)** | **76.66 (±0.12)** | **75.45 (±0.13)** |
-| **DST** | RiGL | 75.02 (±0.10) | 73.70 (±0.20) | 71.89 (±0.07) |
+| | AC/DC + HAM (ours) | **77.20 (±0.14)** | **76.66 (±0.12)** | **75.45 (±0.13)** |
+| **DST** | [RiGL](https://github.com/google-research/rigl) | 75.02 (±0.10) | 73.70 (±0.20) | 71.89 (±0.07) |
 | | RiGL + Sign-In | 75.02 (±0.10) | 74.27 (±0.08) | **73.07 (±0.17)** |
-| | RiGL + HAM | **76.22 (±0.07)** | **74.83 (±0.08)** | 72.93 (±0.10) |
-| **Cont. spars.** | spred | 72.64 | 71.84 | 69.47 |
-| | PILoT | 75.62 | 74.73 | 71.30 |
-| | STR | 75.49 (±0.14) | 72.40 (±0.11) | 64.94 (±0.07) |
-| | STR + HAM | **76.37 (±0.18)** | **75.01 (±0.02)** | **71.41 (±0.10)** |
+| | RiGL + HAM (ours) | **76.22 (±0.07)** | **74.83 (±0.08)** | 72.93 (±0.10) |
+| **Cont. spars.** | [spred](https://openreview.net/forum?id=880tEHqxzg) | 72.64 | 71.84 | 69.47 |
+| | [PILoT](https://openreview.net/forum?id=U47ymTS3ut) | 75.62 | 74.73 | 71.30 |
+| | [STR](https://github.com/RAIVNLab/STR) | 75.49 (±0.14) | 72.40 (±0.11) | 64.94 (±0.07) |
+| | STR + HAM (ours) | **76.37 (±0.18)** | **75.01 (±0.02)** | **71.41 (±0.10)** |
  
-HAM combines naturally with SAM and dense training as well.
+HAM combines naturally with [SAM](https://arxiv.org/pdf/2010.01412) and dense training as well.
 Dense training of ResNet-50 on ImageNet (top-1 accuracy):
  
 | | 100 epochs | 200 epochs | + SAM, 100 epochs | + SAM, 200 epochs |
 |---|---|---|---|---|
 | Baseline | 76.72 (±0.19) | 77.27 (±0.13) | 77.10 (±0.21) | 77.94 (±0.16) |
-| HAM | **77.51 (±0.11)** | **77.86 (±0.05)** | **77.92 (±0.15)** | **78.56 (±0.12)** |
+| HAM (ours) | **77.51 (±0.11)** | **77.86 (±0.05)** | **77.92 (±0.15)** | **78.56 (±0.12)** |
  
 ---
 
