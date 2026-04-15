@@ -31,6 +31,8 @@ The overparameterization trick `m * w` induces a useful hyperbolic implicit bias
 
 ## Optimizer Wrapper
 ```python
+import torch
+
 class HamOptimizerWrapper(torch.optim.Optimizer):
     def __init__(self, optimizer, alpha = 200, beta = 1e-3, max_weight_norm=1000.0, max_grad_norm=20.0):
          """Wraps any PyTorch optimizer with the HAM multiplicative update.
