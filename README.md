@@ -144,8 +144,7 @@ class HamOptimizerWrapper(torch.optim.Optimizer):
 from XXX import HamOptimizerWrapper
 
 optimizer = HamOptimizerWrapper(optimizer, 200, 1e-3)
-'''
-     
+```
 
 ## Results
 
