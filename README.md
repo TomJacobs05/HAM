@@ -138,6 +138,15 @@ class HamOptimizerWrapper(torch.optim.Optimizer):
         self.optimizer.zero_grad()
 ```
 
+## Example use
+1. Store wrapper class in XXX.py 
+```python
+from XXX import HamOptimizerWrapper
+
+optimizer = HamOptimizerWrapper(optimizer, 200, 1e-3)
+'''
+     
+
 ## Results
 
 ### Sparse methods
