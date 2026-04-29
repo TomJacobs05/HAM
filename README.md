@@ -53,9 +53,9 @@ class HamOptimizerWrapper(torch.optim.Optimizer):
         max_weight_norm: Per-tensor weight-norm clip value.  Default: 1000.
         max_grad_norm:   Per-group gradient-norm clip value. Default: 20.
     """
-        self.optimizer = optimizer
-        self.max_weight_norm = max_weight_norm
-        self.max_grad_norm = max_grad_norm
+	self.optimizer = optimizer
+    self.max_weight_norm = max_weight_norm
+    self.max_grad_norm = max_grad_norm
 	self.alpha = alpha
 	self.beta = beta
 
