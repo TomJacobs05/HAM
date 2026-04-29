@@ -56,8 +56,8 @@ class HamOptimizerWrapper(torch.optim.Optimizer):
 	self.optimizer = optimizer
     self.max_weight_norm = max_weight_norm
     self.max_grad_norm = max_grad_norm
-	self.alpha = alpha
-	self.beta = beta
+    self.alpha = alpha
+    self.beta = beta
 
     def __getattr__(self, name):
         """
