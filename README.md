@@ -35,7 +35,7 @@ import torch
 
 class HamOptimizerWrapper(torch.optim.Optimizer):
     def __init__(self, optimizer, alpha = 200, beta = 1e-3, max_weight_norm=1000.0, max_grad_norm=20.0):
-         """Wraps any PyTorch optimizer with the HAM multiplicative update.
+        """Wraps any PyTorch optimizer with the HAM multiplicative update.
      
         After each base optimizer step, HAM rescales weight tensors (ndim >= 2)
         by an exponential factor derived from the gradient sign and a decay term:
