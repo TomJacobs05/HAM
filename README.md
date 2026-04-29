@@ -36,28 +36,28 @@ import torch
 class HamOptimizerWrapper(torch.optim.Optimizer):
     def __init__(self, optimizer, alpha = 200, beta = 1e-3, max_weight_norm=1000.0, max_grad_norm=20.0):
          """Wraps any PyTorch optimizer with the HAM multiplicative update.
- 
-    After each base optimizer step, HAM rescales weight tensors (ndim >= 2)
-    by an exponential factor derived from the gradient sign and a decay term:
- 
-        w  ←  w · exp(lr · (−α · sign(w) · ∇f(w)  −  β))
- 
-    This induces a mild implicit sparsity bias without zeroing weights.
-    Scalar / bias / norm parameters are left untouched by the HAM step but
-    still receive weight-norm and gradient-norm clipping.
- 
-    Args:
-        optimizer:       Any instantiated torch.optim.Optimizer.
-        alpha (float):   Gradient-sign coupling strength.  Default: 200.
-        beta (float):    Constant decay term.               Default: 1e-3.
-        max_weight_norm: Per-tensor weight-norm clip value.  Default: 1000.
-        max_grad_norm:   Per-group gradient-norm clip value. Default: 20.
-    """
-	self.optimizer = optimizer
-    self.max_weight_norm = max_weight_norm
-    self.max_grad_norm = max_grad_norm
-    self.alpha = alpha
-    self.beta = beta
+     
+        After each base optimizer step, HAM rescales weight tensors (ndim >= 2)
+        by an exponential factor derived from the gradient sign and a decay term:
+     
+            w  ←  w · exp(lr · (−α · sign(w) · ∇f(w)  −  β))
+     
+        This induces a mild implicit sparsity bias without zeroing weights.
+        Scalar / bias / norm parameters are left untouched by the HAM step but
+        still receive weight-norm and gradient-norm clipping.
+     
+        Args:
+            optimizer:       Any instantiated torch.optim.Optimizer.
+            alpha (float):   Gradient-sign coupling strength.  Default: 200.
+            beta (float):    Constant decay term.               Default: 1e-3.
+            max_weight_norm: Per-tensor weight-norm clip value.  Default: 1000.
+            max_grad_norm:   Per-group gradient-norm clip value. Default: 20.
+        """
+        self.optimizer = optimizer
+        self.max_weight_norm = max_weight_norm
+        self.max_grad_norm = max_grad_norm
+        self.alpha = alpha
+        self.beta = beta
 
     def __getattr__(self, name):
         """
